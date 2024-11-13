@@ -3,8 +3,9 @@
 -- the value provided as every element of the list.
 --
 -- >>> repeat 17
---[17,17,17,17,17,17,17,17,17...
+-- [17,17,17,17,17,17,17,17,17...
 
+f1 v = v : (f1 v)
 
 -- Question 2
 -- Using the `repeat'` function and the `take` function we defined in the lesson (comes with Haskell),
@@ -18,34 +19,48 @@
 -- >>> replicate 4 True
 -- [True,True,True,True]
 
+replic n v = take n (f1 v)
 
 -- Question 3
 -- Write a function called `concat'` that concatenates a list of lists.
 --
 -- >>> concat' [[1,2],[3],[4,5,6]]
 -- [1,2,3,4,5,6]
+{-
+concat [] = []
+concat ls@(l : []) = l
+concat ls@(l : l2 : t) = concat (l ++ l2 : t)
+-}
 
+conc' ls = foldl (++) [] ls
 
 -- Question 4
 -- Write a function called `zip'` that takes two lists and returns a list of
 -- corresponding pairs (zips them) like this:
 --
 -- >>> zip' [1, 2] ['a', 'b']
--- [(1,'a'),(2,'b')]
+-- Variable not in scope:
+--   zip' :: [a0_a1tcG[tau:1]] -> [Char] -> t_a1tcD[sk:1]
 --
 -- If one input list is shorter than the other, excess elements of the longer
 -- list are discarded, even if one of the lists is infinite:
 --
 -- >>> zip' [1] ['a', 'b']
--- [(1,'a')]
+-- Variable not in scope:
+--   zip' :: [a0_a1tfs[tau:1]] -> [Char] -> t_a1tfp[sk:1]
 -- >>> zip' [1, 2] ['a']
--- [(1,'a')]
+-- Variable not in scope:
+--   zip' :: [a0_a1tig[tau:1]] -> [Char] -> t_a1tid[sk:1]
 -- >>> zip' [] [1..]
--- []
+-- Variable not in scope:
+--   zip' :: [a0_a1tl4[tau:1]] -> [a1_a1tl5[tau:1]] -> t_a1tl1[sk:1]
 -- >>> zip' [1..] []
--- []
+-- Variable not in scope:
+--   zip' :: [a0_a1tnR[tau:1]] -> [a1_a1tnV[tau:1]] -> t_a1tnO[sk:1]
 
-
+zip' [] l = []
+zip' l [] = []
+zip' l1 l2 = (head l1, head l2) : zip' (tail l1) (tail l2)
 
 -- Question 5
 -- Create a function called `zipWith'` that generalises `zip'` by zipping with a
@@ -60,6 +75,9 @@
 -- >>> zipWith (+) [1, 2, 3] [4, 5, 6]
 -- [5,7,9]
 
+zipW' f [] l = []
+zipW' f l [] = []
+zipW' f l1 l2 = (f (head l1) (head l2)) : zip' (tail l1) (tail l2)
 
 -- Question 6
 -- Write a function called `takeWhile'` that takes a precate and a list and
@@ -72,11 +90,9 @@
 -- >>> takeWhile (< 0) [1,2,3]
 -- []
 
-
 -- Question 7 (More difficult)
 -- Write a function that takes in an integer n, calculates the factorial n! and
 -- returns a string in the form of 1*2* ... *n = n! where n! is the actual result.
-
 
 -- Question 8
 -- Below you have defined some beer prices in bevogBeerPrices and your order list in
