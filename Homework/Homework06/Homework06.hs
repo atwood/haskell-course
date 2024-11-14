@@ -90,9 +90,28 @@ zipW' f l1 l2 = (f (head l1) (head l2)) : zip' (tail l1) (tail l2)
 -- >>> takeWhile (< 0) [1,2,3]
 -- []
 
+{-
+takeW' pred lst = foldl filt [] lst
+  where
+    filt accum item = if pred item then accum ++ [item] else accum
+
+-}
+takeW' pred [] = []
+takeW' pred (h : t) = if (pred h) then h : (takeW' pred t) else []
+
 -- Question 7 (More difficult)
 -- Write a function that takes in an integer n, calculates the factorial n! and
 -- returns a string in the form of 1*2* ... *n = n! where n! is the actual result.
+
+fact n
+  | n < 0 = error "asdf"
+  | n == 1 = 1
+  | otherwise = n * (fact (n - 1))
+
+factStr n = tail a ++ "=" ++ (show (fact n))
+  where
+    (a, b) = help ("", 1)
+    help (s, v) = if v > n then (s, 0) else help (s ++ "*" ++ (show v), v + 1)
 
 -- Question 8
 -- Below you have defined some beer prices in bevogBeerPrices and your order list in
@@ -116,3 +135,12 @@ orderList =
 
 deliveryCost :: Double
 deliveryCost = 8.50
+
+cost order = deliveryCost + foldl help 0 order
+  where
+    help acc (item, quant) = quant * itemCost
+      where
+        itemCost =
+          case (lookup item bevogBeerPrices) of
+            Just p -> p
+            Nothing -> error "afds"
