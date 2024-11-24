@@ -14,21 +14,29 @@ Continuing with the logistics software of the lesson:
 
 data MailedBox t d a = EmptyMailBox t d | MailBoxTo t d a
 
+mdBx1 = EmptyMailBox "Bob" [""]
+
+mdBx2 = MailBoxTo "Bob" [""] "Hi Bob"
+
 -- Question 2 --
 -- Create instances for Show, Eq, and Ord for these three data types (use
 -- automatic deriving whenever possible):
 
 data Position = Intern | Junior | Senior | Manager | Chief
+  deriving (Show, Eq, Ord)
 
 data Experience = Programming | Managing | Leading
+  deriving (Show, Eq, Ord)
 
 type Address = String
 
 data Salary = USD Double | EUR Double
+  deriving (Show, Eq, Ord)
 
 data Relationship
   = Contractor Position Experience Salary Address
   | Employee Position Experience Salary Address
+  deriving (Show, Eq, Ord)
 
 data Pokemon = Pokemon
   { pName :: String,
@@ -36,6 +44,7 @@ data Pokemon = Pokemon
     pGeneration :: Int,
     pPokeDexNum :: Int
   }
+  deriving (Show, Eq, Ord)
 
 charizard = Pokemon "Charizard" ["Fire", "Flying"] 1 6
 
@@ -46,15 +55,23 @@ venusaur = Pokemon "Venusaur" ["Grass", "Poison"] 1 3
 
 -- -- Team memeber experience in years
 -- newtype Exp = Exp Double
+type Exp = Double
+
 --
 -- -- Team memeber data
 -- type TeamMember = (String, Exp)
+type TeamMember = (String, Exp)
+
 --
 -- -- List of memeber of the team
 -- team :: [TeamMember]
 -- team = [("John", Exp 5), ("Rick", Exp 2), ("Mary", Exp 6)]
+team = [("John", 5), ("Rick", 2), ("Mary", 6)]
+
 --
 -- -- Function to check the combined experience of the team
 -- -- This function applied to `team` using GHCi should work
 -- combineExp :: [TeamMember] -> Exp
 -- combineExp = foldr ((+) . snd) 0
+-- combineExp :: (a, Integer) -> Integer
+combineExp tm = foldr ((+) . snd) 0 tm -- why doesn't this work in pointfree style?

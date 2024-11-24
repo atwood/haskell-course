@@ -21,6 +21,18 @@ and prints it to the terminal inside a string message.
 -}
 
 -- listFiles :: IO ()
+listFiles = listDirectory -- pointfree
+
+dirSize path = do
+  rawList <- listFiles path
+  let rSz = length rawList
+  let hidden file = '.' == (head file)
+  let list = filter (not . hidden) rawList
+  let sz = length list
+
+  let sz = length list
+
+  print sz
 
 {-
 -- Question 2 --
@@ -29,8 +41,13 @@ to a file called msg.txt, and after that, it reads the text from the msg.txt
 file and prints it back. Use the writeFile and readFile functions.
 -}
 
--- createMsg :: IO ()
-
+createMsg :: IO ()
+createMsg = do
+  print "write a msg"
+  msg <- getLine
+  writeFile "msg.txt" msg
+  msg2 <- readFile "msg.txt"
+  print msg2
 
 {-
 -- Context for Questions 3 and 4 --
@@ -48,21 +65,21 @@ prime number below our limit. Do it step by step, starting with question 3.
 
 primes1 :: Integer -> [Integer]
 primes1 m = sieve [2 .. m]
- where
-  sieve [] = []
-  sieve (p : xs) = p : sieve [x | x <- xs, x `mod` p > 0]
+  where
+    sieve [] = []
+    sieve (p : xs) = p : sieve [x | x <- xs, x `mod` p > 0]
 
 primes2 :: Integer -> [Integer]
 primes2 m = sieve [2 .. m]
- where
-  sieve (x : xs) = x : sieve (xs \\ [x, x + x .. m])
-  sieve [] = []
+  where
+    sieve (x : xs) = x : sieve (xs \\ [x, x + x .. m])
+    sieve [] = []
 
 primes3 :: Integer -> [Integer]
 primes3 m = turner [2 .. m]
- where
-  turner [] = []
-  turner (p : xs) = p : turner [x | x <- xs, x < p * p || rem x p /= 0]
+  where
+    turner [] = []
+    turner (p : xs) = p : turner [x | x <- xs, x < p * p || rem x p /= 0]
 
 {-
 -- Question 3 --
@@ -71,8 +88,12 @@ Use the getCPUTime :: IO Integer function to get the CPU time before and after t
 The CPU time here is given in picoseconds (which is 1/1000000000000th of a second).
 -}
 
--- timeIO :: IO a -> IO ()
-
+timeIO :: IO a -> IO ()
+timeIO f = do
+  t1 <- getCPUTime
+  f
+  t2 <- getCPUTime
+  print $ t2 - t1
 
 {-
 -- Question 4 --
@@ -81,7 +102,14 @@ and compares the time all three algorithms take to produce the largest prime bef
 limit. Print the number and time to the standard output.
 -}
 
--- benchmark :: IO ()
+benchmark :: IO ()
+benchmark = do
+  print "enter the limit"
+  s <- getLine
+  n <- return $ (read s :: Integer)
+  timeIO $ print (last (primes1 n))
+  timeIO $ print (last (primes2 n))
+  timeIO $ print (last (primes3 n))
 
 {-
  -- Question 5 -- EXTRA CREDITS -- (In case the previous ones were too easy)

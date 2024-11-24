@@ -5,8 +5,9 @@
  - in the lesson.
  -}
 
-newtype All = All { getAll :: Bool } deriving (Show, Eq)
-newtype Any = Any { getAny :: Bool } deriving (Show, Eq)
+newtype All = All {getAll :: Bool} deriving (Show, Eq)
+
+newtype Any = Any {getAny :: Bool} deriving (Show, Eq)
 
 -- TODO: Define the Semigroup and Monoid instances for All and Any
 
@@ -86,16 +87,16 @@ log3 = Log ["!"]
 - and mappend overrides the configuration.
 -}
 
-data Config = Config { port :: Int, host :: String } deriving (Show, Eq)
+data Config = Config {port :: Int, host :: String} deriving (Show, Eq)
 
 -- TODO: Define the Semigroup and Monoid instances for Config
 
 -- Test it out
 
 c1, c2, c3 :: Config
-c1 = Config { port = 8080, host = "localhost" }
-c2 = Config { port = 3000, host = "localhost" }
-c3 = Config { port = 4000, host = "example.com" }
+c1 = Config {port = 8080, host = "localhost"}
+c2 = Config {port = 3000, host = "localhost"}
+c3 = Config {port = 4000, host = "example.com"}
 
 --- >>> c1 <> c2
 -- Config {port = 3000, host = "localhost"}
@@ -135,6 +136,7 @@ data Severity = Low | Medium | High | Critical deriving (Show, Eq, Ord)
 -- TODO: Define the Semigroup and Monoid instances for Severity
 
 -- TODO: Define the Emergency type
+data Emergency = Emergency Severity String All
 
 -- TODO: Define the Semigroup and Monoid instances for Emergency
 

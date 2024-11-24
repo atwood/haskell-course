@@ -1,6 +1,6 @@
 {-
 
-**************************** IMPORTANT ****************************
+\**************************** IMPORTANT ****************************
 
 This week is a two-step homework. First, you have to solve the
 "Maze" challenge, and then the "Forest" challenge. The challenges
@@ -10,7 +10,7 @@ spoilers of the "Forest" one. Make sure to check the solution for
 "Maze" (and only "Maze," I see you 🥸👀) before starting with the
 "Forest" challenge!
 
-*******************************************************************
+\*******************************************************************
 
 Today, you'll build the simplest and most basic game imaginable.
 It'll be a maze game where the player has to write a list of moves, and the game will perform them
@@ -22,15 +22,15 @@ takes a maze and a list of moves and returns a String with the resulting state.
 
 It should look like this:
 
-*Main> solveMaze testMaze []
+\*Main> solveMaze testMaze []
 "You're still inside the maze. Choose a path, brave adventurer: GoLeft, GoRight, or GoForward."
-*Main> solveMaze testMaze [GoLeft]
+\*Main> solveMaze testMaze [GoLeft]
 "You've hit a wall!"
-*Main> solveMaze testMaze [GoForward]
+\*Main> solveMaze testMaze [GoForward]
 "You're still inside the maze. Choose a path, brave adventurer: GoLeft, GoRight, or GoForward."
-*Main> solveMaze testMaze [GoForward, GoRight]
+\*Main> solveMaze testMaze [GoForward, GoRight]
 "You've hit a wall!"
-*Main> solveMaze testMaze [GoForward, GoLeft]
+\*Main> solveMaze testMaze [GoForward, GoLeft]
 "YOU'VE FOUND THE EXIT!!"
 
 How are you going to achieve this? You can try it on your own, but here you have a
@@ -53,3 +53,53 @@ still need to make another choice.
 
 6. Adapt adapt "solveMaze" function to use "showCurrentChoice" and play with your new game using GHCi! :D
 -}
+
+-- q1
+data Move = GoLeft | GoRight | GoForward
+
+data Maze = Exit | Wall | Hall Maze Maze Maze deriving (Read, Show, Eq)
+
+-- q2
+move Exit mv = Exit
+move Wall mv = Wall
+move mz@(Hall l f r) GoLeft = l
+move mz@(Hall l f r) GoForward = f
+move mz@(Hall l f r) GoRight = r
+
+-- q3
+
+testMaze = Hall Wall (Hall Wall Wall t2) Wall
+  where
+    t2 = Hall Wall t3 Wall
+    t3 = Hall t4 Wall Wall
+    t4 = Exit
+
+-- solveTestMaze
+--  move (move (move (move testMaze GoForward) GoRight) GoForward) GoLeft
+
+moves1 = [GoForward, GoRight, GoForward, GoLeft]
+
+-- solveMaze testMaze moves1
+-- q4
+solveMaze mz lstMvs = foldl move mz lstMvs
+
+-- q5
+
+showCurrentChoice Wall = "hit a wall"
+showCurrentChoice Exit = "Success! Found an Exit"
+showCurrentChoice (Hall l f r) = "choose next move"
+
+-- q6
+play mz = do
+  print "Play the maze game"
+  print "Enter your move: GoLeft, GoForward, or GoRight"
+  s <- getLine
+  m <- return $ s2m s
+  let mz2 = move mz m
+  print $ showCurrentChoice mz2
+  play mz2
+
+s2m "GoLeft" = GoLeft
+s2m "GoForward" = GoForward
+s2m "GoRight" = GoRight
+s2m _ = error "Invalid input"
