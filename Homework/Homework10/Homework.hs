@@ -75,3 +75,7 @@ team = [("John", 5), ("Rick", 2), ("Mary", 6)]
 -- combineExp = foldr ((+) . snd) 0
 -- combineExp :: (a, Integer) -> Integer
 combineExp tm = foldr ((+) . snd) 0 tm -- why doesn't this work in pointfree style?
+
+-- Ah, ambigous type. Give signature
+cm2 :: [(String, Integer)] -> Integer
+cm2 = foldr ((+) . snd) 0 -- why doesn't this work in pointfree style?
